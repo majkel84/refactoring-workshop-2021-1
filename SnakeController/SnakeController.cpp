@@ -138,11 +138,12 @@ void Controller::receive(std::unique_ptr<Event> e)
                     clearOldFood.value = Cell_FREE;
                     m_displayPort.send(std::make_unique<EventT<DisplayInd>>(clearOldFood));
 
-                    DisplayInd placeNewFood;
-                    placeNewFood.x = receivedFood.x;
-                    placeNewFood.y = receivedFood.y;
-                    placeNewFood.value = Cell_FOOD;
-                    m_displayPort.send(std::make_unique<EventT<DisplayInd>>(placeNewFood));
+                    Controller::setNewDisplayInd(receivedFood.x, receivedFood.y, Cell_FOOD);
+                    // DisplayInd placeNewFood;
+                    // placeNewFood.x = receivedFood.x;
+                    // placeNewFood.y = receivedFood.y;
+                    // placeNewFood.value = Cell_FOOD;
+                    // m_displayPort.send(std::make_unique<EventT<DisplayInd>>(placeNewFood));
                 }
 
                 m_foodPosition = std::make_pair(receivedFood.x, receivedFood.y);
@@ -163,11 +164,6 @@ void Controller::receive(std::unique_ptr<Event> e)
                         m_foodPort.send(std::make_unique<EventT<FoodReq>>());
                     } else {
                         Controller::setNewDisplayInd(requestedFood.x, requestedFood.y, Cell_FOOD);
-                        // DisplayInd placeNewFood;
-                        // placeNewFood.x = requestedFood.x;
-                        // placeNewFood.y = requestedFood.y;
-                        // placeNewFood.value = Cell_FOOD;
-                        //m_displayPort.send(std::make_unique<EventT<DisplayInd>>(placeNewFood));
                     }
 
                     m_foodPosition = std::make_pair(requestedFood.x, requestedFood.y);
