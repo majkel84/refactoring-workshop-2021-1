@@ -83,12 +83,13 @@ void Controller::receive(std::unique_ptr<Event> e)
             } else {
                 for (auto &segment : m_segments) {
                     if (not --segment.ttl) {
-                        DisplayInd l_evt;
-                        l_evt.x = segment.x;
-                        l_evt.y = segment.y;
-                        l_evt.value = Cell_FREE;
+                        Controller::setNewDisplayInd(segment.x, segment.y, Cell_FREE);
+                        // DisplayInd l_evt;
+                        // l_evt.x = segment.x;
+                        // l_evt.y = segment.y;
+                        // l_evt.value = Cell_FREE;
 
-                        m_displayPort.send(std::make_unique<EventT<DisplayInd>>(l_evt));
+                        // m_displayPort.send(std::make_unique<EventT<DisplayInd>>(l_evt));
                     }
                 }
             }
@@ -97,12 +98,6 @@ void Controller::receive(std::unique_ptr<Event> e)
         if (not lost) {
             m_segments.push_front(newHead);
             Controller::setNewDisplayInd(newHead.x, newHead.y, Cell_SNAKE);
-            // DisplayInd placeNewHead;
-            // placeNewHead.x = newHead.x;
-            // placeNewHead.y = newHead.y;
-            // placeNewHead.value = Cell_SNAKE;
-
-            // m_displayPort.send(std::make_unique<EventT<DisplayInd>>(placeNewHead));
 
             m_segments.erase(
                 std::remove_if(
