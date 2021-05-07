@@ -96,12 +96,13 @@ void Controller::receive(std::unique_ptr<Event> e)
 
         if (not lost) {
             m_segments.push_front(newHead);
-            DisplayInd placeNewHead;
-            placeNewHead.x = newHead.x;
-            placeNewHead.y = newHead.y;
-            placeNewHead.value = Cell_SNAKE;
+            Controller::setNewDisplayInd(newHead.x, newHead.y, Cell_SNAKE);
+            // DisplayInd placeNewHead;
+            // placeNewHead.x = newHead.x;
+            // placeNewHead.y = newHead.y;
+            // placeNewHead.value = Cell_SNAKE;
 
-            m_displayPort.send(std::make_unique<EventT<DisplayInd>>(placeNewHead));
+            // m_displayPort.send(std::make_unique<EventT<DisplayInd>>(placeNewHead));
 
             m_segments.erase(
                 std::remove_if(
@@ -133,12 +134,6 @@ void Controller::receive(std::unique_ptr<Event> e)
                     m_foodPort.send(std::make_unique<EventT<FoodReq>>());
                 } else {
                     Controller::setNewDisplayInd(m_foodPosition.first, m_foodPosition.second, Cell_FREE);
-                    // DisplayInd clearOldFood;
-                    // clearOldFood.x = m_foodPosition.first;
-                    // clearOldFood.y = m_foodPosition.second;
-                    // clearOldFood.value = Cell_FREE;
-                    // m_displayPort.send(std::make_unique<EventT<DisplayInd>>(clearOldFood));
-
                     Controller::setNewDisplayInd(receivedFood.x, receivedFood.y, Cell_FOOD);
                 }
 
