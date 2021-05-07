@@ -77,8 +77,7 @@ void Controller::receive(std::unique_ptr<Event> e)
             } else if (newHead.x < 0 or newHead.y < 0 or
                        newHead.x >= m_mapDimension.first or
                        newHead.y >= m_mapDimension.second) {
-                m_scorePort.send(std::make_unique<EventT<LooseInd>>());
-                lost = true;
+                lost = Controller::setGameLost();
             } else {
                 for (auto &segment : m_segments) {
                     if (not --segment.ttl) {
