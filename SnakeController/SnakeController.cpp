@@ -34,22 +34,7 @@ Controller::Controller(IPort& p_displayPort, IPort& p_foodPort, IPort& p_scorePo
 
         istr >> d;
         Controller::changeDirection(d);
-        // switch (d) {
-        //     case 'U':
-        //         m_currentDirection = Direction_UP;
-        //         break;
-        //     case 'D':
-        //         m_currentDirection = Direction_DOWN;
-        //         break;
-        //     case 'L':
-        //         m_currentDirection = Direction_LEFT;
-        //         break;
-        //     case 'R':
-        //         m_currentDirection = Direction_RIGHT;
-        //         break;
-        //     default:
-        //         throw ConfigurationError();
-        // }
+
         istr >> length;
 
         while (length) {
@@ -177,11 +162,12 @@ void Controller::receive(std::unique_ptr<Event> e)
                     if (requestedFoodCollidedWithSnake) {
                         m_foodPort.send(std::make_unique<EventT<FoodReq>>());
                     } else {
-                        DisplayInd placeNewFood;
-                        placeNewFood.x = requestedFood.x;
-                        placeNewFood.y = requestedFood.y;
-                        placeNewFood.value = Cell_FOOD;
-                        m_displayPort.send(std::make_unique<EventT<DisplayInd>>(placeNewFood));
+                        Controller::setNewDisplayInd(requestedFood.x, requestedFood.y, Cell_FOOD);
+                        // DisplayInd placeNewFood;
+                        // placeNewFood.x = requestedFood.x;
+                        // placeNewFood.y = requestedFood.y;
+                        // placeNewFood.value = Cell_FOOD;
+                        //m_displayPort.send(std::make_unique<EventT<DisplayInd>>(placeNewFood));
                     }
 
                     m_foodPosition = std::make_pair(requestedFood.x, requestedFood.y);
@@ -211,6 +197,15 @@ void Controller::changeDirection(char key)
         default:
             throw ConfigurationError();
         }
+}
+
+void Controller::setNewDisplayInd(int x, int y, Cell newCellValue)
+{
+    DisplayInd placeNewInd;
+    placeNewInd.x = x;
+    placeNewInd.y = y;
+    placeNewInd.value = newCellValue;
+    m_displayPort.send(std::make_unique<EventT<DisplayInd>>(placeNewInd));
 }
 
 } // namespace Snake

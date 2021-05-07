@@ -32,6 +32,7 @@ public:
 
     void receive(std::unique_ptr<Event> e) override;
     void changeDirection(char key);
+    void setNewDisplayInd(int x, int y, Cell newCellValue);
 
 private:
     struct Segment
