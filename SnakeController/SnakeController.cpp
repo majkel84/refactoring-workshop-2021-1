@@ -33,22 +33,23 @@ Controller::Controller(IPort& p_displayPort, IPort& p_foodPort, IPort& p_scorePo
         m_foodPosition = std::make_pair(foodX, foodY);
 
         istr >> d;
-        switch (d) {
-            case 'U':
-                m_currentDirection = Direction_UP;
-                break;
-            case 'D':
-                m_currentDirection = Direction_DOWN;
-                break;
-            case 'L':
-                m_currentDirection = Direction_LEFT;
-                break;
-            case 'R':
-                m_currentDirection = Direction_RIGHT;
-                break;
-            default:
-                throw ConfigurationError();
-        }
+        Controller::changeDirection(d);
+        // switch (d) {
+        //     case 'U':
+        //         m_currentDirection = Direction_UP;
+        //         break;
+        //     case 'D':
+        //         m_currentDirection = Direction_DOWN;
+        //         break;
+        //     case 'L':
+        //         m_currentDirection = Direction_LEFT;
+        //         break;
+        //     case 'R':
+        //         m_currentDirection = Direction_RIGHT;
+        //         break;
+        //     default:
+        //         throw ConfigurationError();
+        // }
         istr >> length;
 
         while (length) {
@@ -190,6 +191,26 @@ void Controller::receive(std::unique_ptr<Event> e)
             }
         }
     }
+}
+
+void Controller::changeDirection(char key)
+{
+    switch (key) {
+        case 'U':
+            m_currentDirection = Direction_UP;
+            break;
+        case 'D':
+            m_currentDirection = Direction_DOWN;
+            break;
+        case 'L':
+            m_currentDirection = Direction_LEFT;
+            break;
+        case 'R':
+            m_currentDirection = Direction_RIGHT;
+            break;
+        default:
+            throw ConfigurationError();
+        }
 }
 
 } // namespace Snake
