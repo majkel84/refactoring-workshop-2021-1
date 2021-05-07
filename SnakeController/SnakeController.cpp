@@ -65,8 +65,7 @@ void Controller::receive(std::unique_ptr<Event> e)
 
         for (auto segment : m_segments) {
             if (segment.x == newHead.x and segment.y == newHead.y) {
-                m_scorePort.send(std::make_unique<EventT<LooseInd>>());
-                lost = true;
+                lost = Controller::setGameLost();
                 break;
             }
         }
@@ -84,12 +83,6 @@ void Controller::receive(std::unique_ptr<Event> e)
                 for (auto &segment : m_segments) {
                     if (not --segment.ttl) {
                         Controller::setNewDisplayInd(segment.x, segment.y, Cell_FREE);
-                        // DisplayInd l_evt;
-                        // l_evt.x = segment.x;
-                        // l_evt.y = segment.y;
-                        // l_evt.value = Cell_FREE;
-
-                        // m_displayPort.send(std::make_unique<EventT<DisplayInd>>(l_evt));
                     }
                 }
             }
@@ -188,6 +181,12 @@ void Controller::setNewDisplayInd(int x, int y, Cell newCellValue)
     placeNewInd.y = y;
     placeNewInd.value = newCellValue;
     m_displayPort.send(std::make_unique<EventT<DisplayInd>>(placeNewInd));
+}
+
+bool Controller::setGameLost()
+{
+    m_scorePort.send(std::make_unique<EventT<LooseInd>>());
+    return true;
 }
 
 } // namespace Snake

@@ -33,6 +33,7 @@ public:
     void receive(std::unique_ptr<Event> e) override;
     void changeDirection(char key);
     void setNewDisplayInd(int x, int y, Cell newCellValue);
+    bool setGameLost();
 
 private:
     struct Segment
